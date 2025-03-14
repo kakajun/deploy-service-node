@@ -59,3 +59,6 @@ deploy -v  // 查看版本
 ```sh
 deploy   // 部署
 ```
+
+## 注意
+脚本中会调用`package.json`中script 中的build 命令,执行打包, 请务必保证有改打包命令
