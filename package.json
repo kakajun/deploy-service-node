@@ -1,10 +1,13 @@
 {
   "name": "deploy-service-node",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "前端一键自动化部署插件,实现脚本自定义",
   "homepage": "https://github.com/kakajun/deploy-service-node.git",
   "author": {
     "name": "kakajun"
+  },
+  "scripts": {
+    "dev": "node lib/node-deploy.js"
   },
   "keywords": [
     "deploy",
