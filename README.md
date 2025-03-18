@@ -1,8 +1,8 @@
 # deploy-service-node
-前端一键部署,高度自定义sh,实现全自动流程
+前端一键部署,高度自定义sh,实现全自动流程:打包, 上传, 解压,备份
 
 ## 配置文件准备
-1. deployConfig.js
+1. deployConfig.js  (必填)
 
 ```js
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
 }
 ```
 
-2. remote-deploy.sh
+2. remote-deploy.sh (可选)
 下面是部署到服务器后怎么执行脚本,可以根据自己的需求自由修改, 我这里只提供一个可执行的例子, 脚本非必须,如果没有配置, 那么就用我内置的sh,代码如下:
 ```sh
 #!/bin/bash
@@ -53,7 +53,7 @@ npm install deploy-service-node -g
 ## 使用
 
 ```sh
-deploy -v  // 查看版本
+deploy -v  // 查看版本, 检查安装是否成功
 ```
 
 ```sh
@@ -62,3 +62,6 @@ deploy   // 部署
 
 ## 注意
 脚本中会调用`package.json`中script 中的build 命令,执行打包, 请务必保证有改打包命令
+
+## 最后
+项目长期维护, 欢迎大家提issue和star
