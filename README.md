@@ -53,6 +53,7 @@ npm install deploy-service-node -g
 ## 使用
 
 ```sh
+deploy     // 打了这个命令, 在配置了deployConfig.js前提下, 就可以自动打包部署了
 deploy -v  // 查看版本, 检查安装是否成功
 ```
 
@@ -61,7 +62,8 @@ deploy   // 部署
 ```
 
 ## 注意
-脚本中会调用`package.json`中script 中的build 命令,执行打包, 请务必保证有改打包命令
+1. 脚本中会调用`package.json`中script 中的build 命令,执行打包, 请务必保证有改打包命令
+2. node14 安装时会报错, 就只有一个node-ssh 依赖, 经测试不影响使用
 
 ## 最后
 项目长期维护, 欢迎大家提issue和star
