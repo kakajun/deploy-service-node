@@ -53,12 +53,11 @@ npm install deploy-service-node -g
 ## 使用
 
 ```sh
-deploy     // 打了这个命令, 在配置了deployConfig.js前提下, 就可以自动打包部署了
 deploy -v  // 查看版本, 检查安装是否成功
 ```
 
 ```sh
-deploy   // 部署
+deploy   // 部署,打了这个命令, 在配置了deployConfig.js前提下, 就可以自动打包部署了
 ```
 
 ## 注意
