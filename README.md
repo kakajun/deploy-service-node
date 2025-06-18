@@ -22,18 +22,29 @@ deploy   // 需要先阅读配置文件准备, 部署,打了这个命令, 在配
 
 ```js
 module.exports = {
-  LOCAL_TAR_FILE: 'mobilevue.tar.gz', // 本地打包后的tar包名
+  LOCAL_TAR_FILE: 'fvue.tar.gz', // 本地打包后的tar包名
   REMOTE_USER: 'root', // 远程服务器用户名
   REMOTE_HOST: '192.168.0.250', // 远程服务器ip
   REMOTE_PORT: 22, // 远程服务器端口
   REMOTE_PASSWORD: '123456', // 远程服务器密码
   REMOTE_DIR: '/usr/local/nginx/html/', // 远程服务器部署目录
   REMOTE_BACKDIR: '/usr/local/nginx/backups/', // 远程服务器备份目录
-  REMOTE_DISTNAME: 'mobilevue' // 远程服务器部署目录名
+  REMOTE_DISTNAME: 'fvue' // 远程服务器部署目录名
 }
 ```
 
-2. remote-deploy.sh (可选,Linux 服务器部署脚本)
+2. package.json 下的 scripts 配置
+
+```js
+"scripts": {
+     "build": "vue-cli-service build --dest fvue && npm run tar",
+     "tar": "tar -czf fvue.tar.gz  fvue",
+}
+```
+
+注意`fvue` 名字要跟 `REMOTE_DISTNAME` 中配置的一样,可以根据自己的包名配置, 否则会部署失败
+
+3. remote-deploy.sh (可选,Linux 服务器部署脚本)
    下面是部署到服务器后怎么执行脚本,可以根据自己的需求自由修改, 我这里只提供一个可执行的例子, 脚本非必须,如果没有配置, 那么就用我内置的 sh,代码如下:
 
 ```sh
@@ -64,7 +75,7 @@ tar -xvf "$LOCAL_TAR_FILE" || { echo "解压失败"; exit 1; }
 echo "解压成功"
 ```
 
-3. remote-deploy.cmd (可选,Windows 服务器部署脚本)
+4. remote-deploy.cmd (可选,Windows 服务器部署脚本)
 
 ```cmd
 @echo off
@@ -153,8 +164,8 @@ exit /b 0
 
 1. 脚本中会调用`package.json`中 script 中的 build 命令,执行打包, 请务必保证有改打包命令
 2. node14 安装时会报错, 就只有一个 node-ssh 依赖, 经测试不影响使用
-3. 如果是windows系统, cmd 脚本需要以`CRLF`格式进行文件编辑和保存, 否则传到服务器,代码会失去换行挤到一起,导致脚本执行失败
-4. 如果工程目录下的脚本有变动, 需要删除服务器的脚本,本地脚本会重新上传,  否则不会重新上传, 或者可以直接到服务器里面修改原来脚本
+3. 如果是 windows 系统, cmd 脚本需要以`CRLF`格式进行文件编辑和保存, 否则传到服务器,代码会失去换行挤到一起,导致脚本执行失败
+4. 如果工程目录下的脚本有变动, 需要删除服务器的脚本,本地脚本会重新上传, 否则不会重新上传, 或者可以直接到服务器里面修改原来脚本
 
 ## 最后
 
