@@ -76,5 +76,6 @@ tar -zxvf "%LOCAL_TAR_FILE%" >nul 2>&1 || (
         del "%%F"
     )
 )
+del "%LOCAL_TAR_FILE%" >nul 2>&1
 echo [INFO] Operation completed successfully
 exit /b 0

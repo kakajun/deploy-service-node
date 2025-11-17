@@ -13,7 +13,16 @@ deploy -v  // 查看版本, 检查安装是否成功
 ```
 
 ```sh
-deploy   // 需要先阅读配置文件准备, 部署,打了这个命令, 在配置了deployConfig.js前提下, 就可以自动打包部署了
+deploy   // 需要先阅读配置文件准备, 部署,在配置好 deployConfig.js 前提下, 自动打包并部署
+```
+
+### 常用参数
+
+```sh
+deploy --help              # 查看帮助
+deploy --nobuild           # 跳过本地构建, 直接压缩/上传/部署
+deploy --config ./deploy.prod.js  # 指定配置文件路径
+deploy -v | --version      # 查看版本
 ```
 
 ## 配置文件准备
@@ -26,7 +35,7 @@ module.exports = {
   REMOTE_USER: 'root', // 远程服务器用户名
   REMOTE_HOST: '192.168.0.250', // 远程服务器ip
   REMOTE_PORT: 22, // 远程服务器端口
-  REMOTE_PASSWORD: '123456', // 远程服务器密码
+  REMOTE_PASSWORD: '123456', // 远程服务器密码(或使用私钥登录,见下)
   REMOTE_DIR: '/usr/local/nginx/html/', // 远程服务器部署目录
   REMOTE_BACKDIR: '/usr/local/nginx/backups/', // 远程服务器备份目录
   REMOTE_DISTNAME: 'fvue' // 远程服务器部署目录名
@@ -43,6 +52,30 @@ module.exports = {
 ```
 
 注意`fvue` 名字要跟 `REMOTE_DISTNAME` 中配置的一样,可以根据自己的包名配置, 否则会部署失败
+
+### 私钥登录与环境变量
+
+支持使用私钥登录与环境变量覆盖配置:
+
+```sh
+# 通过环境变量覆盖(优先级高于配置文件)
+set REMOTE_HOST=192.168.0.250
+set REMOTE_USER=root
+set REMOTE_PORT=22
+set REMOTE_PRIVATE_KEY=C:\\Users\\you\\.ssh\\id_rsa
+set REMOTE_PASSPHRASE=your-passphrase
+deploy
+```
+
+或在 `deployConfig.js` 中加入:
+
+```js
+module.exports = {
+  // ...原有配置
+  PRIVATE_KEY: 'C:/Users/you/.ssh/id_rsa',
+  PASSPHRASE: 'your-passphrase'
+}
+```
 
 3. remote-deploy.sh (可选,Linux 服务器部署脚本)
    下面是部署到服务器后怎么执行脚本,可以根据自己的需求自由修改, 我这里只提供一个可执行的例子, 脚本非必须,如果没有配置, 那么就用我内置的 sh,代码如下:
@@ -72,6 +105,7 @@ if [ -e "$REMOTE_DISTNAME" ]; then
 fi
 
 tar -xvf "$LOCAL_TAR_FILE" || { echo "解压失败"; exit 1; }
+rm -f "$LOCAL_TAR_FILE"
 echo "解压成功"
 ```
 
@@ -156,6 +190,7 @@ tar -zxvf "%LOCAL_TAR_FILE%" >nul 2>&1 || (
         del "%%F"
     )
 )
+del "%LOCAL_TAR_FILE%" >nul 2>&1
 echo [INFO] Operation completed successfully
 exit /b 0
 ```
@@ -165,7 +200,8 @@ exit /b 0
 1. 脚本中会调用`package.json`中 script 中的 build 命令,执行打包, 请务必保证有改打包命令
 2. node14 安装时会报错, 就只有一个 node-ssh 依赖, 经测试不影响使用
 3. 如果是 windows 系统, cmd 脚本需要以`CRLF`格式进行文件编辑和保存, 否则传到服务器,代码会失去换行挤到一起,导致脚本执行失败
-4. 如果工程目录下的脚本有变动, 需要删除服务器的脚本,本地脚本会重新上传, 否则不会重新上传, 或者可以直接到服务器里面修改原来脚本
+4. 远程脚本智能更新: 工程目录下的脚本变动会自动检测并更新到服务器, 无需手动删除远程脚本
+5. 路径分隔符按远程服务器类型自动处理(Linux/Windows), 上传与执行更稳健
 
 ## 最后
 
