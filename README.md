@@ -13,7 +13,7 @@ deploy -v  // 查看版本, 检查安装是否成功
 ```
 
 ```sh
-deploy   // 需要先阅读配置文件准备, 部署,在配置好 deployConfig.js 前提下, 自动打包并部署
+deploy   // 需要先阅读配置文件准备, 部署,在配置好 deployConfig.js 或 deployConfig.cjs 前提下, 自动打包并部署
 ```
 
 ### 常用参数
@@ -27,7 +27,7 @@ deploy -v | --version      # 查看版本
 
 ## 配置文件准备
 
-1. deployConfig.js (必填)
+1. deployConfig.js 或 deployConfig.cjs (必填)
 
 ```js
 module.exports = {
@@ -67,7 +67,7 @@ set REMOTE_PASSPHRASE=your-passphrase
 deploy
 ```
 
-或在 `deployConfig.js` 中加入:
+或在 `deployConfig.js` / `deployConfig.cjs` 中加入:
 
 ```js
 module.exports = {
@@ -199,7 +199,7 @@ exit /b 0
 
 1. 脚本中会调用`package.json`中 script 中的 build 命令,执行打包, 请务必保证有改打包命令
 2. node14 安装时会报错, 就只有一个 node-ssh 依赖, 经测试不影响使用
-3. 如果是 windows 系统, cmd 脚本需要以`CRLF`格式进行文件编辑和保存, 否则传到服务器,代码会失去换行挤到一起,导致脚本执行失败
+3. Linux 服务器使用的 `remote-deploy.sh` 脚本在上传前会自动将 `CRLF` 转换为 `LF`, 无需手动处理换行符; Windows 服务器使用的 `remote-deploy.cmd` 脚本需要以 `CRLF` 格式保存, 否则传到服务器后代码会失去换行挤到一起, 导致脚本执行失败
 4. 远程脚本智能更新: 工程目录下的脚本变动会自动检测并更新到服务器, 无需手动删除远程脚本
 5. 路径分隔符按远程服务器类型自动处理(Linux/Windows), 上传与执行更稳健
 
