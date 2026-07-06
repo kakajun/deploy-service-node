@@ -25,5 +25,4 @@ if [ -e "$REMOTE_DISTNAME" ]; then
 fi
 
 tar -xvf "$LOCAL_TAR_FILE" || { echo "解压失败"; exit 1; }
-rm -f "$LOCAL_TAR_FILE"
-echo "解压成功"
+echo "解压成功，压缩包已保留：$LOCAL_TAR_FILE"
